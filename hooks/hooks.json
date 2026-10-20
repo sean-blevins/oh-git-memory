@@ -1,0 +1,56 @@
+{
+  "hooks": {
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "S=\"${OH_GIT_MEMORY_PLUGIN_DIR:-$HOME/plugins/installed/oh-git-memory}/hooks/scripts/ohgm-prompt.sh\"; [ -f \"$S\" ] || S=$(find \"$HOME/plugins\" \"$HOME/cache/plugins\" \"$PWD/.agents/plugins\" \"$PWD/.openhands/plugins\" -maxdepth 8 -name \"ohgm-prompt.sh\" -print -quit 2>/dev/null); if [ -f \"$S\" ]; then sh \"$S\"; else echo \"oh-git-memory: hook script ohgm-prompt.sh not found\" >&2; fi; exit 0",
+            "timeout": 45
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "S=\"${OH_GIT_MEMORY_PLUGIN_DIR:-$HOME/plugins/installed/oh-git-memory}/hooks/scripts/ohgm-collect.sh\"; [ -f \"$S\" ] || S=$(find \"$HOME/plugins\" \"$HOME/cache/plugins\" \"$PWD/.agents/plugins\" \"$PWD/.openhands/plugins\" -maxdepth 8 -name \"ohgm-collect.sh\" -print -quit 2>/dev/null); if [ -f \"$S\" ]; then sh \"$S\"; else echo \"oh-git-memory: hook script ohgm-collect.sh not found\" >&2; fi; exit 0",
+            "timeout": 45
+          },
+          {
+            "type": "agent",
+            "system_prompt": "You decide whether this turn holds anything worth remembering. Read the file at ${OH_GIT_MEMORY_DIR:-$HOME/.oh-git-memory}/.ohgm/.turn-digest.md with the terminal tool, then carry out the instructions at the top of it: stage the relevant text verbatim, or stage nothing. If the turn holds nothing durable, change nothing and finish.",
+            "tools": [
+              "terminal",
+              "file_editor"
+            ],
+            "timeout": 180,
+            "max_iterations": 4
+          },
+          {
+            "type": "command",
+            "command": "S=\"${OH_GIT_MEMORY_PLUGIN_DIR:-$HOME/plugins/installed/oh-git-memory}/hooks/scripts/ohgm-stage.sh\"; [ -f \"$S\" ] || S=$(find \"$HOME/plugins\" \"$HOME/cache/plugins\" \"$PWD/.agents/plugins\" \"$PWD/.openhands/plugins\" -maxdepth 8 -name \"ohgm-stage.sh\" -print -quit 2>/dev/null); if [ -f \"$S\" ]; then sh \"$S\"; else echo \"oh-git-memory: hook script ohgm-stage.sh not found\" >&2; fi; exit 0",
+            "timeout": 45
+          },
+          {
+            "type": "agent",
+            "system_prompt": "You file staged memory notes. Read the file at ${OH_GIT_MEMORY_DIR:-$HOME/.oh-git-memory}/.ohgm/.remember-input.md with the terminal tool, then carry out the instructions at the top of it: condense the staged notes into short bullets in the right memory file. Use file_editor to write. If nothing was staged, change nothing and finish.",
+            "tools": [
+              "terminal",
+              "file_editor"
+            ],
+            "timeout": 180,
+            "max_iterations": 8
+          },
+          {
+            "type": "command",
+            "command": "S=\"${OH_GIT_MEMORY_PLUGIN_DIR:-$HOME/plugins/installed/oh-git-memory}/hooks/scripts/ohgm-publish.sh\"; [ -f \"$S\" ] || S=$(find \"$HOME/plugins\" \"$HOME/cache/plugins\" \"$PWD/.agents/plugins\" \"$PWD/.openhands/plugins\" -maxdepth 8 -name \"ohgm-publish.sh\" -print -quit 2>/dev/null); if [ -f \"$S\" ]; then sh \"$S\"; else echo \"oh-git-memory: hook script ohgm-publish.sh not found\" >&2; fi; exit 0",
+            "timeout": 45
+          }
+        ]
+      }
+    ]
+  }
+}

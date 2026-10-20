@@ -1,0 +1,5 @@
+{
+  "name": "oh-git-memory",
+  "version": "0.1.0",
+  "description": "Git-backed, cross-conversation memory for OpenHands per-conversation Docker mode. Ships an always-loaded memory-policy skill and a keyword-triggered wrap-up skill, injects a shared global file and a per project/agent-profile file on every prompt, and commits and pushes durable facts automatically."
+}
